@@ -19,14 +19,14 @@ void i2c2_config(void)
 {
     /* enable GPIOB clock */
     rcu_periph_clock_enable(RCU_GPIOA);
-	rcu_periph_clock_enable(RCU_GPIOC);
-	rcu_periph_clock_enable(RCU_AF);
+    rcu_periph_clock_enable(RCU_GPIOC);
+    rcu_periph_clock_enable(RCU_AF);
     /* connect PA8 to I2C2_SCL */
     /* connect PC9 to I2C2_SDA */
     gpio_init(GPIOA, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
-	gpio_init(GPIOC, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
-	gpio_pin_remap1_config(GPIO_PCF5, GPIO_PCF5_I2C2_REMAP0, ENABLE);
-		
+    gpio_init(GPIOC, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+    gpio_pin_remap1_config(GPIO_PCF5, GPIO_PCF5_I2C2_REMAP0, ENABLE);
+    	
     /* enable I2C clock */
     rcu_periph_clock_enable(RCU_I2C2);
     /* configure I2C clock */
@@ -133,12 +133,12 @@ void gt24_eeprom_byte_write(uint8_t* p_buffer, uint16_t write_address)
     /* send the EEPROM's internal address to write to : 16位片内地址,高字节 */
     i2c_data_transmit(I2C2, write_address >> 8);
     
-	/* wait until BTC bit is set */	
+    /* wait until BTC bit is set */	
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC));
-	 
-	/* send the EEPROM's internal address to write to : 16位片内地址,低字节 */
+     
+    /* send the EEPROM's internal address to write to : 16位片内地址,低字节 */
     i2c_data_transmit(I2C2, write_address);
-	
+    
     /* wait until BTC bit is set */
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC));
     
@@ -188,16 +188,16 @@ void gt24_eeprom_page_write(uint8_t* p_buffer, uint16_t write_address, uint8_t n
     
     /* send the EEPROM's internal address to write to : 16位片内地址,高字节 */
     i2c_data_transmit(I2C2, write_address >> 8);
-	
-	/* wait until BTC bit is set */
+    
+    /* wait until BTC bit is set */
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC));
-	
-	/* send the EEPROM's internal address to write to : 16位片内地址,低字节 */
+    
+    /* send the EEPROM's internal address to write to : 16位片内地址,低字节 */
     i2c_data_transmit(I2C2, write_address);
     
     /* wait until BTC bit is set */
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC));
-	
+    
 
     /* while there is data to be written */
     while(number_of_byte--){  
@@ -259,9 +259,9 @@ void gt24_eeprom_buffer_read(uint8_t* p_buffer, uint16_t read_address, uint16_t 
     
     /* wait until BTC bit is set */
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC));
-	
+    
     /* send the EEPROM's internal address to write to : 16位片内地址,低字节  */	
-	i2c_data_transmit(I2C2, read_address);
+    i2c_data_transmit(I2C2, read_address);
     
     /* wait until BTC bit is set */
     while(!i2c_flag_get(I2C2, I2C_FLAG_BTC)); 
@@ -394,15 +394,15 @@ void gt24_eeprom_wait_standby_state(void)
 */
 void gt24c256_byte_write(uint16_t write_address, uint8_t* p_buffer)
 {
-	i2c2_start();
-	i2c2_send_byte(gt24c256_addr);		//发送从机地址
-	i2c2_wait_ack();
-	i2c2_send_byte(write_address >> 8);	//发送片内地址 
-	i2c2_wait_ack();
-	i2c2_send_byte(write_address);		//发送片内地址 
-	i2c2_wait_ack();
-	i2c2_send_byte(*p_buffer);			//发送数据
-	i2c2_wait_ack();
+    i2c2_start();
+    i2c2_send_byte(gt24c256_addr);		//发送从机地址
+    i2c2_wait_ack();
+    i2c2_send_byte(write_address >> 8);	//发送片内地址 
+    i2c2_wait_ack();
+    i2c2_send_byte(write_address);		//发送片内地址 
+    i2c2_wait_ack();
+    i2c2_send_byte(*p_buffer);			//发送数据
+    i2c2_wait_ack();
     i2c2_stop();						//产生一个停止条件 
 }
 
@@ -415,23 +415,23 @@ void gt24c256_byte_write(uint16_t write_address, uint8_t* p_buffer)
 */
 void gt24c256_random_read(uint16_t read_address, uint8_t* p_buffer)
 {
-	i2c2_start();
-	i2c2_send_byte(gt24c256_addr);		//发送从机地址 + Write
-	i2c2_wait_ack();
-	i2c2_send_byte(read_address >> 8);	//发送片内地址	    
-	i2c2_wait_ack();
-	i2c2_send_byte(read_address);		//发送片内地址 
-	i2c2_wait_ack();
-	i2c2_start();
-	i2c2_send_byte(gt24c256_addr + 1);	//发送从机地址 + Read
-	i2c2_wait_ack();
-	*p_buffer=i2c2_read_byte(0);
-	i2c2_stop();						//产生一个停止条件    
+    i2c2_start();
+    i2c2_send_byte(gt24c256_addr);		//发送从机地址 + Write
+    i2c2_wait_ack();
+    i2c2_send_byte(read_address >> 8);	//发送片内地址	    
+    i2c2_wait_ack();
+    i2c2_send_byte(read_address);		//发送片内地址 
+    i2c2_wait_ack();
+    i2c2_start();
+    i2c2_send_byte(gt24c256_addr + 1);	//发送从机地址 + Read
+    i2c2_wait_ack();
+    *p_buffer=i2c2_read_byte(0);
+    i2c2_stop();						//产生一个停止条件    
 }
 
 
 /* slect gt24c256 device */
 void gt24c256_init(uint8_t slave_addr)
 {
-	gt24c256_addr = slave_addr;
+    gt24c256_addr = slave_addr;
 }

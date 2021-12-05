@@ -212,44 +212,44 @@ void I2C2_ER_IRQHandler(void)
 }
 
 /*!
-	\brief		DMA0 Channel6 interrupt handler，i2c0 RX
+    \brief		DMA0 Channel6 interrupt handler，i2c0 RX
 */
 void DMA0_Channel6_IRQHandler(void)
 {
     if(dma_interrupt_flag_get(DMA0, DMA_CH6, DMA_INT_FLAG_FTF)){     
    		dma_interrupt_flag_clear(DMA0, DMA_CH6, DMA_INT_FLAG_G);
-		if(i2c0_offset < 32)
+    	if(i2c0_offset < 32)
     		i2c0_data_transmit = i2c_reg[i2c0_offset];
-		else
-			i2c0_data_transmit = 0xff;
+    	else
+    		i2c0_data_transmit = 0xff;
     }
 }
 
 /*!
-	\brief		DMA0 Channel4 interrupt handler，i2c1 RX
+    \brief		DMA0 Channel4 interrupt handler，i2c1 RX
 */
 void DMA0_Channel4_IRQHandler(void)
 {
     if(dma_interrupt_flag_get(DMA0, DMA_CH4, DMA_INT_FLAG_FTF)){     
    		dma_interrupt_flag_clear(DMA0, DMA_CH4, DMA_INT_FLAG_G);
-		if(i2c1_offset < 32)
+    	if(i2c1_offset < 32)
     		i2c1_data_transmit = i2c_reg[i2c1_offset];
-		else
-			i2c1_data_transmit = 0xff;
+    	else
+    		i2c1_data_transmit = 0xff;
     }
 }
 
 /*!
-	\brief		DMA1 Channel6 interrupt handler，i2c2 RX
+    \brief		DMA1 Channel6 interrupt handler，i2c2 RX
 */
 void DMA1_Channel6_IRQHandler(void)
 {
     if(dma_interrupt_flag_get(DMA1, DMA_CH6, DMA_INT_FLAG_FTF)){     
    		dma_interrupt_flag_clear(DMA1, DMA_CH6, DMA_INT_FLAG_G);
-		if(i2c2_offset < 32)
+    	if(i2c2_offset < 32)
     		i2c2_data_transmit = i2c_reg[i2c2_offset];
-		else
-			i2c2_data_transmit = 0xff;
+    	else
+    		i2c2_data_transmit = 0xff;
     }
 }
 

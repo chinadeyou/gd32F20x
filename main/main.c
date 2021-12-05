@@ -27,34 +27,34 @@ void uart0_init(void);
 
 /*!
     \brief      计算电压值，并保存到数组。
-	\desc		bit[7:4]整数部分， bit[3:0] 小数部分
+    \desc		bit[7:4]整数部分， bit[3:0] 小数部分
     \param[in]  none
     \retval     none
 */
 void adc_voltage_cal(void)
 {
-	int i = 0;
-	float voltage[4] = {0};
-	int8_t integer;
-	float decimal;
-	uint8_t decimal_hex;
+    int i = 0;
+    float voltage[4] = {0};
+    int8_t integer;
+    float decimal;
+    uint8_t decimal_hex;
 
-	for(i = 0; i < 4; i++ )
-	{
-		voltage[i] = adc_value[i]*3.3/4096;
+    for(i = 0; i < 4; i++ )
+    {
+    	voltage[i] = adc_value[i]*3.3/4096;
 
-		integer = voltage[i];
-		decimal = voltage[i] - integer;
+    	integer = voltage[i];
+    	decimal = voltage[i] - integer;
 
-		decimal_hex = decimal/0.0625 + 0.5;
-		if(decimal_hex > 15)
-			decimal_hex = 15;
+    	decimal_hex = decimal/0.0625 + 0.5;
+    	if(decimal_hex > 15)
+    		decimal_hex = 15;
 
-		i2c_reg[i] = integer << 4 | decimal_hex;
+    	i2c_reg[i] = integer << 4 | decimal_hex;
 
-		printf("voltage[%d] = %f\r\n", i, voltage[i]);
-		printf("i2c_reg[%d]= %#x\r\n", i, i2c_reg[i]);
-	}
+    	printf("voltage[%d] = %f\r\n", i, voltage[i]);
+    	printf("i2c_reg[%d]= %#x\r\n", i, i2c_reg[i]);
+    }
 }
 
 /*!
@@ -68,21 +68,21 @@ int main(void)
     /* configure systick */
     systick_config();
 
-	uart0_init();
-	
-	printf("hello\r\n");
+    uart0_init();
+    
+    printf("hello\r\n");
 
-	while(1)
-	{
+    while(1)
+    {
 
-	}
+    }
 
 }
 
 
 void uart0_init(void)
 {
-	 /* enable GPIO clock */
+     /* enable GPIO clock */
     rcu_periph_clock_enable(RCU_GPIOA);
 
     /* enable USART clock */

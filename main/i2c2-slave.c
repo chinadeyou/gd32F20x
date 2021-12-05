@@ -23,15 +23,15 @@ uint8_t i2c2_recv_offset[2] = {0};
 */
 void I2C2_EventIRQ_Handler(void)
 {
-	if(i2c_interrupt_flag_get(I2C2, I2C_INT_FLAG_ADDSEND)){
+    if(i2c_interrupt_flag_get(I2C2, I2C_INT_FLAG_ADDSEND)){
         /* clear the ADDSEND bit */
-		i2c2_recv_count	= 0;
+    	i2c2_recv_count	= 0;
         i2c_interrupt_flag_clear(I2C2,I2C_INT_FLAG_ADDSEND);	
     }
-	else if(i2c_interrupt_flag_get(I2C2, I2C_INT_FLAG_STPDET)){
-		/* clear the STPDET bit */
-		i2c_enable(I2C2);
-	}
+    else if(i2c_interrupt_flag_get(I2C2, I2C_INT_FLAG_STPDET)){
+    	/* clear the STPDET bit */
+    	i2c_enable(I2C2);
+    }
 }
 
 /*!
@@ -77,7 +77,7 @@ void I2C2_ErrorIRQ_Handler(void)
         i2c_interrupt_flag_clear(I2C2, I2C_INT_FLAG_PECERR);
     }
 
-	i2c_enable(I2C2);
+    i2c_enable(I2C2);
 }
 
 /*!
@@ -95,33 +95,33 @@ void I2C2_DMA_Config(void)
     dma_deinit(DMA1, DMA_CH5);
     											
     /* initialize DMA single data mode */
-	dma_data_parameter.direction    = DMA_MEMORY_TO_PERIPHERAL;
-	dma_data_parameter.memory_addr  = (uint32_t)(&i2c2_data_transmit);
-	dma_data_parameter.memory_width = DMA_MEMORY_WIDTH_8BIT;
+    dma_data_parameter.direction    = DMA_MEMORY_TO_PERIPHERAL;
+    dma_data_parameter.memory_addr  = (uint32_t)(&i2c2_data_transmit);
+    dma_data_parameter.memory_width = DMA_MEMORY_WIDTH_8BIT;
     dma_data_parameter.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_data_parameter.periph_addr  = I2C2_DATA_ADDRESS;    
     dma_data_parameter.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
-	dma_data_parameter.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
+    dma_data_parameter.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
     dma_data_parameter.number       = 1;
     dma_data_parameter.priority     = DMA_PRIORITY_HIGH;  
     dma_init(DMA1, DMA_CH5, &dma_data_parameter);
   	dma_circulation_enable(DMA1, DMA_CH5);
 
-	/* ADC_DMA_channel deinit */
-	dma_deinit(DMA1, DMA_CH6);
-	/* initialize DMA single data mode */
-	dma_data_parameter.direction    = DMA_PERIPHERAL_TO_MEMORY;
-	dma_data_parameter.memory_addr  = (uint32_t)(&i2c2_offset);
-	dma_data_parameter.memory_width = DMA_MEMORY_WIDTH_8BIT;
-	dma_data_parameter.periph_addr  = I2C2_DATA_ADDRESS;
-	dma_data_parameter.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
-	dma_data_parameter.number       = 1;
-	dma_data_parameter.priority     = DMA_PRIORITY_ULTRA_HIGH;
-	dma_init(DMA1, DMA_CH6, &dma_data_parameter);
-	dma_circulation_enable(DMA1, DMA_CH6);
+    /* ADC_DMA_channel deinit */
+    dma_deinit(DMA1, DMA_CH6);
+    /* initialize DMA single data mode */
+    dma_data_parameter.direction    = DMA_PERIPHERAL_TO_MEMORY;
+    dma_data_parameter.memory_addr  = (uint32_t)(&i2c2_offset);
+    dma_data_parameter.memory_width = DMA_MEMORY_WIDTH_8BIT;
+    dma_data_parameter.periph_addr  = I2C2_DATA_ADDRESS;
+    dma_data_parameter.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+    dma_data_parameter.number       = 1;
+    dma_data_parameter.priority     = DMA_PRIORITY_ULTRA_HIGH;
+    dma_init(DMA1, DMA_CH6, &dma_data_parameter);
+    dma_circulation_enable(DMA1, DMA_CH6);
 
-	nvic_irq_enable(DMA1_Channel6_IRQn, 1, 0);
-	dma_interrupt_enable(DMA1, DMA_CH6, DMA_INT_FTF);
+    nvic_irq_enable(DMA1_Channel6_IRQn, 1, 0);
+    dma_interrupt_enable(DMA1, DMA_CH6, DMA_INT_FTF);
 }
 
 /*!
@@ -135,7 +135,7 @@ void I2C2_Nvic_Config(void)
     nvic_priority_group_set(NVIC_PRIGROUP_PRE1_SUB3);
     nvic_irq_enable(I2C2_EV_IRQn, 0, 3);
     nvic_irq_enable(I2C2_ER_IRQn, 0, 2);
-	/* enable the I2C2 interrupt */
+    /* enable the I2C2 interrupt */
     i2c_interrupt_enable(I2C2, I2C_INT_ERR);
     i2c_interrupt_enable(I2C2, I2C_INT_EV);
     i2c_interrupt_enable(I2C2, I2C_INT_BUF);
@@ -149,20 +149,20 @@ void I2C2_Nvic_Config(void)
 */
 void I2C2_Slave_Config(void)
 {
-	/* enable GPIOB clock */
+    /* enable GPIOB clock */
     rcu_periph_clock_enable(RCU_GPIOA);
-	rcu_periph_clock_enable(RCU_GPIOC);
-	/* enable I2C2 clock */
+    rcu_periph_clock_enable(RCU_GPIOC);
+    /* enable I2C2 clock */
     rcu_periph_clock_enable(RCU_I2C2);
-	rcu_periph_clock_enable(RCU_AF);
-	/* enable DMA clock */
+    rcu_periph_clock_enable(RCU_AF);
+    /* enable DMA clock */
     rcu_periph_clock_enable(RCU_DMA1);
-	
+    
     /* connect PA8 to I2C2_SCL */
     /* connect PC9 to I2C2_SDA */
-	gpio_init(GPIOA, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
-	gpio_init(GPIOC, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
-	gpio_pin_remap1_config(GPIO_PCF5, GPIO_PCF5_I2C2_REMAP0, ENABLE);
+    gpio_init(GPIOA, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
+    gpio_init(GPIOC, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+    gpio_pin_remap1_config(GPIO_PCF5, GPIO_PCF5_I2C2_REMAP0, ENABLE);
 
     /* I2C clock configure */
     i2c_clock_config(I2C2, 400000, I2C_DTCY_16_9);
@@ -173,22 +173,22 @@ void I2C2_Slave_Config(void)
     i2c_enable(I2C2);
     /* enable acknowledge */
     i2c_ack_config(I2C2, I2C_ACK_ENABLE);
-	i2c_stretch_scl_low_config(I2C2,I2C_SCLSTRETCH_DISABLE);
+    i2c_stretch_scl_low_config(I2C2,I2C_SCLSTRETCH_DISABLE);
 
-	I2C2_DMA_Config();
-	i2c_dma_enable(I2C2,I2C_DMA_ON);
-	/* enable DMA channel */
+    I2C2_DMA_Config();
+    i2c_dma_enable(I2C2,I2C_DMA_ON);
+    /* enable DMA channel */
   	dma_channel_enable(DMA1, DMA_CH5);
-	dma_channel_enable(DMA1, DMA_CH6);
+    dma_channel_enable(DMA1, DMA_CH6);
 
-	I2C2_Nvic_Config();
+    I2C2_Nvic_Config();
 }
 
 /*!
-	\brief  	设置I2C0从机地址
-	\param[in] 	addr:七位i2c地址
+    \brief  	设置I2C0从机地址
+    \param[in] 	addr:七位i2c地址
  */
 void i2c2_set_own_addr(uint8_t addr)
 {
-	i2c2_own_addr = addr << 1;
+    i2c2_own_addr = addr << 1;
 }

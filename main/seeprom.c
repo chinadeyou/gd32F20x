@@ -1038,42 +1038,42 @@ uint8_t seeprom_info[] = {
 /* GT24C256 更新函数 */
 int gt24c256_update(void)
 {
-	uint16_t i, j;
+    uint16_t i, j;
     uint8_t i2c_buffer_read[GT24C256_PAGE_SIZE];
-	
+    
     printf("\r\nGT24C256 writing...\r\n");
 
     /* EEPROM data write */
     gt24_eeprom_buffer_write(seeprom_info, EEP_FIRST_PAGE, SEEPROM_INFO_SIZE); 
-	
-	delay_1ms(500);
-	
-	printf("GT24C256 checking...\r\n");
-	for(i = 0; i < SEEPROM_INFO_SIZE; i+= GT24C256_PAGE_SIZE)
-	{
-		gt24_eeprom_buffer_read(i2c_buffer_read, i, GT24C256_PAGE_SIZE); 
-		
-		for (j = 0; j < GT24C256_PAGE_SIZE; j++)
-		{
-			if(i2c_buffer_read[i] != seeprom_info[i + j]) {
-				printf("%d : 0x%02X ", i, i2c_buffer_read[i]);
-				printf("Err:data read and write aren't matching.\n\r");
-				return I2C_FAIL;
-			}
-		}
-	}
-	
+    
+    delay_1ms(500);
+    
+    printf("GT24C256 checking...\r\n");
+    for(i = 0; i < SEEPROM_INFO_SIZE; i+= GT24C256_PAGE_SIZE)
+    {
+    	gt24_eeprom_buffer_read(i2c_buffer_read, i, GT24C256_PAGE_SIZE); 
+    	
+    	for (j = 0; j < GT24C256_PAGE_SIZE; j++)
+    	{
+    		if(i2c_buffer_read[i] != seeprom_info[i + j]) {
+    			printf("%d : 0x%02X ", i, i2c_buffer_read[i]);
+    			printf("Err:data read and write aren't matching.\n\r");
+    			return I2C_FAIL;
+    		}
+    	}
+    }
+    
     printf("I2C-GT24C256 Check Passed!\n\r");
-	
+    
     return I2C_OK;
 }
 
 
 void seeprom_update(void)
 {
-	i2c2_config();
-	
-	gt24c256_init(SEEPROM_ADDR);
-	
-	gt24c256_update();
+    i2c2_config();
+    
+    gt24c256_init(SEEPROM_ADDR);
+    
+    gt24c256_update();
 }

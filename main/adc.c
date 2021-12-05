@@ -61,7 +61,7 @@ void adc_config(void)
 */
 void timer_config(void)
 {
-	/*TIMER1 的时钟为120MHz*/
+    /*TIMER1 的时钟为120MHz*/
     timer_oc_parameter_struct timer_ocintpara;
     timer_parameter_struct timer_initpara;	
 
@@ -143,11 +143,11 @@ void adc_init(void)
     /* config ADC clock */
     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV12);
 
-	/* config the GPIO as analog mode */  
+    /* config the GPIO as analog mode */  
     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_OSPEED_50MHZ, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
 
-	/* TIMER configuration */
-	timer_config();
+    /* TIMER configuration */
+    timer_config();
     /* DMA configuration */
     dma_config();
     /* ADC configuration */
